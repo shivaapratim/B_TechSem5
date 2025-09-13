@@ -1,16 +1,16 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-void dfs(int i, vector<int> &a, vector<int> &cur, vector<vector<int>> &ans)
+void find(int ind, vector<vector<int>> &ans, vector<int> &ds, vector<int> &nums)
 {
-    ans.push_back(cur);
-    for (int j = i; j < a.size(); j++)
+    ans.push_back(ds);
+    for (int i = ind; i < nums.size(); i++)
     {
-        if (j > i && a[j] == a[j - 1])
-            continue;
-        cur.push_back(a[j]);
-        dfs(j + 1, a, cur, ans);
-        cur.pop_back();
+        if (i > ind && nums[i] == nums[i - 1])
+            continue; // skip duplicates
+        ds.push_back(nums[i]);
+        find(i + 1, ans, ds, nums);
+        ds.pop_back();
     }
 }
 
@@ -18,16 +18,17 @@ int main()
 {
     int n;
     cin >> n;
-    vector<int> a(n);
+    vector<int> nums(n);
     for (int i = 0; i < n; i++)
-        cin >> a[i];
-    sort(a.begin(), a.end());
+        cin >> nums[i];
+    sort(nums.begin(), nums.end());
     vector<vector<int>> ans;
-    vector<int> cur;
-    dfs(0, a, cur, ans);
-    for (auto &v : ans)
+    vector<int> ds;
+    find(0, ans, ds, nums);
+
+    for (auto &vec : ans)
     {
-        for (int x : v)
+        for (int x : vec)
             cout << x << " ";
         cout << "\n";
     }

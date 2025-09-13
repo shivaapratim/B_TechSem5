@@ -1,34 +1,39 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-void dfs(int i, int t, vector<int> &a, vector<int> &cur, vector<vector<int>> &ans)
+void solve(int i, vector<int> &arr, vector<vector<int>> &ans, vector<int> &c, int t)
 {
     if (t == 0)
     {
-        ans.push_back(cur);
+        ans.push_back(arr);
         return;
     }
-    if (i == a.size() || t < 0)
+    if (i >= c.size() || t < 0)
         return;
-    cur.push_back(a[i]);
-    dfs(i, t - a[i], a, cur, ans);
-    cur.pop_back();
-    dfs(i + 1, t, a, cur, ans);
+
+    // INCLUDE
+    arr.push_back(c[i]);
+    solve(i, arr, ans, c, t - c[i]); // reuse same element
+    arr.pop_back();
+
+    // EXCLUDE
+    solve(i + 1, arr, ans, c, t);
 }
 
 int main()
 {
     int n, t;
     cin >> n >> t;
-    vector<int> a(n);
+    vector<int> c(n);
     for (int i = 0; i < n; i++)
-        cin >> a[i];
-    vector<vector<int>> ans;
-    vector<int> cur;
-    dfs(0, t, a, cur, ans);
-    for (auto &v : ans)
+        cin >> c[i];
+    vector<vector<int>> ans, arrs;
+    vector<int> arr;
+    solve(0, arr, ans, c, t);
+
+    for (auto &vec : ans)
     {
-        for (int x : v)
+        for (int x : vec)
             cout << x << " ";
         cout << "\n";
     }
